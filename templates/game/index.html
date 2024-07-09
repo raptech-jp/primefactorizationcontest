@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ゲーム | 素因数分解コンテスト</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/style.css" type="text/css">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="text-center">この数を素因数分解しよう！</h1>
+        <p id="score" class="text-center score-text"></p>
+        <p id="product" class="text-center procudt-text"></p>
+        <div class="d-grid gap-2 col-6 mx-auto">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <input type="number" id="prime1" name="prime1" placeholder="素数1">
+                <input type="number" id="prime2" name="prime2" placeholder="素数2">
+            </div>
+            <button id="checkButton" onclick="checkPrimes()" style="margin-top: 10px;">答え合わせ</button>
+        </div>
+        <div id="modal-container" class="modal-container">
+            <div id="modal-content" class="modal-content">
+                <p id="result" class="text-center procudt-text"></p>
+                <div id="button-container" class="text-center" style="margin-top: 10px;">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+
+</html>
