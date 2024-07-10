@@ -66,7 +66,7 @@ function checkPrimes() {
         buttonContainer.innerHTML = '<button type="button" class="btn btn-success" onclick="nextProblem()">次の問題へ</button>';
     } else {
         resultElement.innerText = '不正解';
-        buttonContainer.innerHTML = '<form id="registerForm" action="register" method="POST">'+'<input type="hidden" id="scoreField" name="point" value="">'+'<input id="usernameField" class="m-2" type="text" name="username" placeholder="なまえを入れてください">' + '<button type="button" class="btn btn-success" onclick="backToTitle()">タイトルに戻る</button>'+'</form>';
+        buttonContainer.innerHTML = '<form id="registerForm" action="../register" method="POST">'+'<input type="hidden" id="scoreField" name="point" value="">'+'<input id="usernameField" class="m-2" type="text" name="username" placeholder="なまえを入れてください">' + '<button type="button" class="btn btn-success" onclick="backToTitle()">タイトルに戻る</button>'+'</form>';
     }
 }
 
