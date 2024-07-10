@@ -20,7 +20,7 @@ function generateRandomPrime() {
 
     // 素数をランダムに生成する関数
     function generatePrime() {
-        let num = Math.floor(Math.random() * 10 + correct) + 1; // 1から100までの乱数を生成
+        let num = Math.floor(Math.random() * (10 + correct)) + 1; // 1から100までの乱数を生成
         while (!isPrime(num)) {
             num = Math.floor(Math.random() * 10 + correct) + 1; // 素数でない場合は再度生成
         }
