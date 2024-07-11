@@ -7,7 +7,7 @@ from flask_session import Session
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.point'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'your_secret_key'  # セッションを使用するために必要
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')  # 環境変数から読み込む
 app.config['SESSION_TYPE'] = 'filesystem'
 
 db = SQLAlchemy(app)
