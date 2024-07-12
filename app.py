@@ -60,9 +60,16 @@ def generate_primes():
                 return False
         return True
 
-    def generate_prime(max_num):
+    def generate_prime(max_num, bias_factor=0.7):
         while True:
-            num = random.randint(1, max_num)
+            # bias_factorの確率で大きい数字が出やすい正規分布を使用
+            if random.random() < bias_factor:
+                num = int(random.gauss(mu=max_num - 10, sigma=max_num / 4))
+                # max_numを超えないように調整
+                num = max(1, min(num, max_num))
+            else:
+                num = random.randint(1, max_num)
+        
             if is_prime(num):
                 return num
 
@@ -88,8 +95,7 @@ def check_primes():
     correct_count = session.get('correct_count', 0)
 
     if (prime1_input == prime1 and prime2_input == prime2) or (prime1_input == prime2 and prime2_input == prime1):
-        if score < product:
-            score = product
+        score += product
         correct_count += 1
         result = '正解'
     else:
