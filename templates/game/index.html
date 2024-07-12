@@ -15,12 +15,13 @@
         <h1 class="text-center">この数を素因数分解しよう！</h1>
         <p id="score" class="text-center score-text"></p>
         <p id="product" class="text-center procudt-text"></p>
-        <div class="d-grid gap-2 col-6 mx-auto">
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="d-grid gap-2 col-12 col-sm-6 mx-auto">
+            <div class="input-group">
                 <input type="number" id="prime1" name="prime1" placeholder="素数1">
                 <input type="number" id="prime2" name="prime2" placeholder="素数2">
             </div>
-            <button id="checkButton" onclick="checkPrimes()" style="margin-top: 10px;">答え合わせ</button>
+            <button id="checkButton" onclick="checkPrimes()" class="btn btn-primary"
+                style="margin-top: 10px;">答え合わせ</button>
         </div>
         <div id="modal-container" class="modal-container">
             <div id="modal-content" class="modal-content">

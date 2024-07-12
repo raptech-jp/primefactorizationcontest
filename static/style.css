@@ -30,3 +30,16 @@
     transform: translate(-50%, -50%);
     z-index: 1010; /* モーダルを前面に表示 */
 }
+
+.container {
+    max-width: 100%;
+    padding: 20px;
+}
+.input-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.input-group input {
+    width: 100%;
+}

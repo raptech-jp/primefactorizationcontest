@@ -19,10 +19,20 @@ function fetchProduct() {
 
 // 素数をチェックする関数
 function checkPrimes() {
+    let prime1_input = document.getElementById('prime1').value;
+    let prime2_input = document.getElementById('prime2').value;
+
+    // 入力欄が空の場合、エラーメッセージを表示して終了
+    if (!prime1_input || !prime2_input) {
+        alert("両方の素数を入力してください。");
+        return;
+    }
+
+    prime1_input = parseInt(prime1_input);
+    prime2_input = parseInt(prime2_input);
+
     checkPrimesExecuted = true;
     document.getElementById('checkButton').disabled = true;
-    let prime1_input = parseInt(document.getElementById('prime1').value);
-    let prime2_input = parseInt(document.getElementById('prime2').value);
 
     var resultElement = document.getElementById('result');
     var buttonContainer = document.getElementById('button-container');
@@ -65,6 +75,11 @@ function nextProblem() {
     document.getElementById('result').innerText = '';
     document.getElementById('button-container').innerHTML = '';
     document.getElementById('checkButton').disabled = false;
+
+    // 入力欄を空白にする
+    document.getElementById('prime1').value = '';
+    document.getElementById('prime2').value = '';
+
     var modalContainer = document.getElementById("modal-container");
     if (modalContainer) {
         modalContainer.style.display = "none";
