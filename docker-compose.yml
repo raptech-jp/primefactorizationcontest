@@ -1,0 +1,20 @@
+services:
+  web:
+    build: .
+    container_name: primefactorization-web
+    ports:
+      - "5000:5000"
+    environment:
+      # SQLite永続化（/data/db.point）を利用
+      SQLALCHEMY_DATABASE_URI: sqlite:////data/db.point
+      SECRET_KEY: "replace-with-real-secret"
+      # Flask-Session の保存場所を変えたい場合（任意）
+      # SESSION_FILE_DIR: /data/flask_session
+    volumes:
+      - prime_data:/data
+      # 開発中ホットリロードしたいなら（Flask debug利用時のみ）
+      # - .:/app
+    restart: unless-stopped
+
+volumes:
+  prime_data:

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>素因数分解の壁と現代の暗号</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', 'Inter', sans-serif;
+        }
+        .number-box {
+            word-break: break-all;
+            hyphens: auto;
+        }
+        .fade-in {
+            animation: fadeIn 1.5s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .dot-flashing {
+            position: relative;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #8b5cf6; /* purple-500 */
+            color: #8b5cf6;
+            animation: dotFlashing 1s infinite linear alternate;
+            animation-delay: .5s;
+            display: inline-block;
+            margin: 0 5px;
+        }
+        .dot-flashing::before, .dot-flashing::after {
+            content: '';
+            display: inline-block;
+            position: absolute;
+            top: 0;
+        }
+        .dot-flashing::before {
+            left: -15px;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #8b5cf6;
+            color: #8b5cf6;
+            animation: dotFlashing 1s infinite alternate;
+            animation-delay: 0s;
+        }
+        .dot-flashing::after {
+            left: 15px;
+            width: 10px;
+            height: 10px;
+            border-radius: 5px;
+            background-color: #8b5cf6;
+            color: #8b5cf6;
+            animation: dotFlashing 1s infinite alternate;
+            animation-delay: 1s;
+        }
+        @keyframes dotFlashing {
+            0% { background-color: #8b5cf6; }
+            50%, 100% { background-color: #ddd6fe; } /* purple-200 */
+        }
+        /* ルビのスタイル調整 */
+        rt {
+            font-size: 0.7em;
+            font-weight: 400;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased">
+
+    <div class="container mx-auto px-4 py-8 md:py-16 max-w-4xl">
+
+        <header class="text-center mb-12">
+            <h1 class="text-3xl md:text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-500 to-indigo-600"><ruby>素因数分解<rt>そいんすうぶんかい</rt></ruby>の「<ruby>壁<rt>かべ</rt></ruby>」</h1>
+            <p class="mt-4 text-lg text-gray-600">なぜ<ruby>巨大<rt>きょだい</rt></ruby>な<ruby>数<rt>かず</rt></ruby>の<ruby>分解<rt>ぶんかい</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しく、それがどう<ruby>暗号<rt>あんごう</rt></ruby>に<ruby>使<rt>つか</rt></ruby>われるのか？</p>
+        </header>
+
+        <main>
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 border border-gray-200">
+                <h2 class="text-xl font-bold text-purple-700 mb-4">この<ruby>巨大<rt>きょだい</rt></ruby>な<ruby>数<rt>かず</rt></ruby>、<ruby>素因数分解<rt>そいんすうぶんかい</rt></ruby>できますか？</h2>
+                <p class="text-gray-600 mb-6"><ruby>以下<rt>いか</rt></ruby>の<ruby>数<rt>かず</rt></ruby>は、2つの<ruby>素数<rt>そすう</rt></ruby>を<ruby>掛<rt>か</rt></ruby>け<ruby>合<rt>あ</rt></ruby>わせて<ruby>作<rt>つく</rt></ruby>られています。コンピュータで<ruby>素因数分解<rt>そいんすうぶんかい</rt></ruby>に<ruby>挑戦<rt>ちょうせん</rt></ruby>してみましょう。</p>
+                <div id="number-display" class="number-box bg-gray-100 rounded-lg p-4 text-lg md:text-xl text-green-700 font-mono border border-gray-300 min-h-[100px] flex items-center justify-center">
+                    <!-- 数字がここに表示されます -->
+                </div>
+
+                <div class="text-center mt-8">
+                    <button id="factorize-btn" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition-all duration-300 shadow-lg hover:shadow-purple-500/50">
+                        <ruby>素因数分解<rt>そいんすうぶんかい</rt></ruby>に<ruby>挑戦<rt>ちょうせん</rt></ruby>！
+                    </button>
+                </div>
+
+                <div id="result-area" class="mt-8 text-center hidden">
+                    <!-- 結果表示エリア -->
+                </div>
+            </div>
+
+            <div id="explanation-area" class="mt-12 hidden">
+                <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 border border-gray-200">
+                    <h2 class="text-2xl font-bold text-purple-700 mb-6">なぜ<ruby>素因数分解<rt>そいんすうぶんかい</rt></ruby>は<ruby>難<rt>むずか</rt></ruby>しいのか？</h2>
+                    <div class="space-y-4 text-gray-700 text-lg leading-relaxed">
+                        <p>
+                            2つの<ruby>数<rt>かず</rt></ruby>を<ruby>掛<rt>か</rt></ruby>ける<ruby>計算<rt>けいさん</rt></ruby>は、たとえ<ruby>数<rt>かず</rt></ruby>が<ruby>大<rt>おお</rt></ruby>きくてもコンピュータは<ruby>一瞬<rt>いっしゅん</rt></ruby>で<ruby>実行<rt>じっこう</rt></ruby>できます。しかし、その<ruby>逆<rt>ぎゃく</rt></ruby>の「<ruby>素因数分解<rt>そいんすうぶんかい</rt></ruby>」は、<ruby>桁数<rt>けたすう</rt></ruby>が<ruby>大<rt>おお</rt></ruby>きくなると<ruby>急激<rt>きゅうげき</rt></ruby>に<ruby>難<rt>むずか</rt></ruby>しくなります。
+                        </p>
+                        <p>
+                            <ruby>現在<rt>げんざい</rt></ruby><ruby>知<rt>し</rt></ruby>られている<ruby>最<rt>もっと</rt></ruby>も<ruby>効率的<rt>こうりつてき</rt></ruby>な<ruby>方法<rt>ほうほう</rt></ruby>でも、この<ruby>桁数<rt>けたすう</rt></ruby>の<ruby>数<rt>かず</rt></ruby>を<ruby>分解<rt>ぶんかい</rt></ruby>するには、<ruby>世界中<rt>せかいじゅう</rt></ruby>のスーパーコンピュータをすべて<ruby>使<rt>つか</rt></ruby>っても<ruby>天文学的<rt>てんもんがくてき</rt></ruby>な<ruby>時間<rt>じかん</rt></ruby>がかかると<ruby>言<rt>い</rt></ruby>われています。これは、<ruby>答<rt>こた</rt></ruby>えの<ruby>候補<rt>こうほ</rt></ruby>となる<ruby>膨大<rt>ぼうだい</rt></ruby>な<ruby>数<rt>かず</rt></ruby>の<ruby>組<rt>く</rt></ruby>み<ruby>合<rt>あ</rt></ruby>わせを、しらみつぶしに<ruby>試<rt>ため</rt></ruby>すしか<ruby>有効<rt>ゆうこう</rt></ruby>な<ruby>手段<rt>しゅだん</rt></ruby>がないためです。
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-8 bg-white rounded-xl shadow-lg p-6 md:p-8 border border-gray-200">
+                    <h2 class="text-2xl font-bold text-purple-700 mb-6">これが<ruby>現代暗号<rt>げんだいあんごう</rt></ruby>の「<ruby>鍵<rt>かぎ</rt></ruby>」</h2>
+                    <div class="space-y-6 text-gray-700 text-lg leading-relaxed">
+                        <p>
+                            この「<ruby>掛<rt>か</rt></ruby>けるのは<ruby>簡単<rt>かんたん</rt></ruby>、<ruby>分解<rt>ぶんかい</rt></ruby>するのは<ruby>困難<rt>こんなん</rt></ruby>」という<ruby>性質<rt>せいしつ</rt></ruby>は、インターネット<ruby>通信<rt>つうしん</rt></ruby>の<ruby>安全<rt>あんぜん</rt></ruby>を<ruby>守<rt>まも</rt></ruby>る<strong class="text-green-600"><ruby>公開鍵暗号<rt>こうかいかぎあんごう</rt></ruby>（RSA<ruby>暗号<rt>あんごう</rt></ruby>）</strong>の<ruby>根幹<rt>こんかん</rt></ruby>をなしています。
+                        </p>
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <div class="flex-1 bg-gray-100 p-4 rounded-lg border border-gray-200">
+                                <h3 class="font-bold text-purple-700"><ruby>公開鍵<rt>こうかいかぎ</rt></ruby> <small>(みんなに<ruby>公開<rt>こうかい</rt></ruby>)</small></h3>
+                                <p class="mt-2"><ruby>巨大<rt>きょだい</rt></ruby>な<ruby>合成数<rt>ごうせいすう</rt></ruby>（N）。<ruby>誰<rt>だれ</rt></ruby>でもこの<ruby>鍵<rt>かぎ</rt></ruby>を<ruby>使<rt>つか</rt></ruby>って<ruby>情報<rt>じょうほう</rt></ruby>を「<ruby>施錠<rt>せじょう</rt></ruby>（<ruby>暗号化<rt>あんごうか</rt></ruby>）」できます。</p>
+                            </div>
+                            <div class="flex-1 bg-gray-100 p-4 rounded-lg border border-gray-200">
+                                <h3 class="font-bold text-green-700"><ruby>秘密鍵<rt>ひみつかぎ</rt></ruby> <small>(<ruby>自分<rt>じぶん</rt></ruby>だけが<ruby>持<rt>も</rt></ruby>つ)</small></h3>
+                                <p class="mt-2"><ruby>合成数<rt>ごうせいすう</rt></ruby>の<ruby>元<rt>もと</rt></ruby>となった2つの<ruby>素数<rt>そすう</rt></ruby>（p, q）。この<ruby>鍵<rt>かぎ</rt></ruby>を<ruby>持<rt>も</rt></ruby>つ<ruby>人<rt>ひと</rt></ruby>だけが<ruby>情報<rt>じょうほう</rt></ruby>を「<ruby>開錠<rt>かいじょう</rt></ruby>（<ruby>復号<rt>ふくごう</rt></ruby>）」できます。</p>
+                            </div>
+                        </div>
+                        <p>
+                            <ruby>公開鍵<rt>こうかいかぎ</rt></ruby>（<ruby>巨大<rt>きょだい</rt></ruby>な<ruby>数<rt>かず</rt></ruby>）から<ruby>秘密鍵<rt>ひみつかぎ</rt></ruby>（<ruby>素数<rt>そすう</rt></ruby>のペア）を<ruby>計算<rt>けいさん</rt></ruby>で<ruby>導<rt>みちび</rt></ruby>き<ruby>出<rt>だ</rt></ruby>すことが<ruby>事実上<rt>じじつじょう</rt></ruby><ruby>不可能<rt>ふかのう</rt></ruby>なため、<ruby>暗号<rt>あんごう</rt></ruby>が<ruby>破<rt>やぶ</rt></ruby>られる<ruby>心配<rt>しんぱい</rt></ruby>がないのです。あなたが<ruby>普段<rt>ふだん</rt></ruby><ruby>使<rt>つか</rt></ruby>っているウェブサイトの<ruby>閲覧<rt>えつらん</rt></ruby>やオンラインショッピングも、この<ruby>数学的<rt>すうがくてき</rt></ruby>な「<ruby>壁<rt>かべ</rt></ruby>」によって<ruby>安全<rt>あんぜん</rt></ruby>が<ruby>保<rt>たも</rt></ruby>たれています。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="text-center mt-16 text-gray-500">
+            <div class="mb-8">
+                <a href="/" class="inline-block bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-3 px-8 rounded-lg transition-colors duration-300">
+                    タイトルにもどる
+                </a>
+            </div>
+            <p>&copy;2025 IzumiLab</p>
+        </footer>
+
+    </div>
+
+    <script>
+        // --- ここからJavaScript ---
+
+        // 対象の数と素因数
+        const challenge = {
+            N: "2630912017029873513611596056938242296329",
+            p: "48112959837082048697",
+            q: "54673257461630679457"
+        };
+        
+        // HTML要素の取得
+        const factorizeBtn = document.getElementById('factorize-btn');
+        const resultArea = document.getElementById('result-area');
+        const explanationArea = document.getElementById('explanation-area');
+        const numberDisplay = document.getElementById('number-display');
+
+        // 素因数分解ボタンがクリックされたときの処理
+        factorizeBtn.addEventListener('click', () => {
+            // ボタンを無効化し、計算中の表示を出す
+            factorizeBtn.disabled = true;
+            factorizeBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            
+            resultArea.innerHTML = `
+                <p class="text-lg text-purple-600"><ruby>計算中<rt>けいさんちゅう</rt></ruby>...</p>
+                <div class="dot-flashing mt-4"></div>
+            `;
+            resultArea.classList.remove('hidden');
+            resultArea.classList.add('fade-in');
+
+            // 4秒後に結果を表示する（計算の難しさを体感させるための遅延）
+            setTimeout(() => {
+                showResult();
+            }, 4000);
+        });
+
+        // 結果を表示する関数
+        function showResult() {
+            resultArea.innerHTML = `
+                <div class="fade-in">
+                    <p class="text-lg text-red-600 mb-4"><ruby>計算<rt>けいさん</rt></ruby>に<ruby>失敗<rt>しっぱい</rt></ruby>しました！</p>
+                    <p class="text-gray-700 mb-6">
+                        この<ruby>計算<rt>けいさん</rt></ruby>は、<ruby>一般的<rt>いっぱんてき</rt></ruby>なコンピュータでは<ruby>現実的<rt>げんじつてき</rt></ruby>な<ruby>時間内<rt>じかんない</rt></ruby>に<ruby>終<rt>お</rt></ruby>えることができません。<br>
+                        しかし、<ruby>答<rt>こた</rt></ruby>えを<ruby>知<rt>し</rt></ruby>っていれば<ruby>検証<rt>けんしょう</rt></ruby>は<ruby>一瞬<rt>いっしゅん</rt></ruby>です。
+                    </p>
+                    <div class="bg-gray-100 border border-gray-300 rounded-lg p-4 max-w-full mx-auto">
+                        <p class="text-purple-700 font-mono text-sm md:text-base number-box">p = ${challenge.p}</p>
+                        <p class="text-purple-700 font-mono text-sm md:text-base number-box mt-2">q = ${challenge.q}</p>
+                        <hr class="my-3 border-gray-300">
+                        <p class="text-gray-600 text-sm"><ruby>検証<rt>けんしょう</rt></ruby> (p × q):</p>
+                        <p class="text-green-700 font-mono text-sm md:text-base number-box">${challenge.N}</p>
+                    </div>
+                </div>
+            `;
+            
+            // 解説エリアを表示する
+            if (explanationArea.classList.contains('hidden')) {
+                explanationArea.classList.remove('hidden');
+                explanationArea.classList.add('fade-in');
+            }
+
+            // ボタンを再度有効化
+            factorizeBtn.disabled = false;
+            factorizeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            factorizeBtn.textContent = "もう一度確認する";
+        }
+        
+        // 初期状態で数字を表示
+        window.onload = () => {
+            numberDisplay.textContent = challenge.N;
+        };
+
+    </script>
+</body>
+</html>
