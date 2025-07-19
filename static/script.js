@@ -23,8 +23,14 @@ function handleTimeout() {
     document.getElementById("modal-container").style.display = "block";
     const resultElement = document.getElementById('result');
     const buttonContainer = document.getElementById('button-container');
-    resultElement.innerText = '時間切れ！';
-    buttonContainer.innerHTML = `<a href="/" class="btn btn-danger btn-lg">タイトルに戻る</a>`;
+    resultElement.innerHTML = `
+    <div>不正解</div>
+    <div style="font-size: 1.2rem; margin-top: 10px;">
+    この難しさが暗号に活かされているよ
+    </div>
+    `;
+    buttonContainer.innerHTML = `<a href="/explanation" class="btn btn-danger btn-lg">解説ページへ</a>`;
+
 }
 
 function fetchProduct() {
